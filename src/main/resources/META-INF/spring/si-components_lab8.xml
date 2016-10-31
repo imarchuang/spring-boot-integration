@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	xmlns:int-xml="http://www.springframework.org/schema/integration/xml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+	http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+	http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+	http://www.springframework.org/schema/integration/xml http://www.springframework.org/schema/integration/xml/spring-integration-xml.xsd">
+
+	<int:gateway id="latinService" service-interface="com.imarchuang.spring.integration.intertech.lab8.service.PigLatinService"
+		default-request-channel="requestChannel" default-reply-channel="replyChannel" />
+
+	<int:channel id="requestChannel" />
+
+	<int:transformer input-channel="requestChannel"
+		output-channel="replyChannel" ref="pigLatinTransformer" />
+	<bean id="pigLatinTransformer" class="com.imarchuang.spring.integration.intertech.lab8.transformer.PigLatinTransformer" />
+
+	<int:channel id="replyChannel" />
+
+	<int:service-activator ref="printingSA" input-channel="replyChannel"/>
+
+	<bean id="printingSA" class="com.imarchuang.spring.integration.intertech.lab8.service.PrintingSA" />
+
+</beans>
+
